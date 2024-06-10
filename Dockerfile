@@ -1,4 +1,4 @@
-FROM nginx :latest
+FROM python:3.13.0a2-alpine
 LABEL maintainer=" ky zerbo"
 RUN apt-get update && \
     apt-get upgrade -y && \
