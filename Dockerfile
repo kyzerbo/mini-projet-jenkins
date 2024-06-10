@@ -1,5 +1,5 @@
 FROM nginx:1.21.1
-LABEL maintainer="Ky zerbo"
+LABEL maintainer="Ky zerbo zerbomohamed007@ yahoo.fr"
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y curl && \
