@@ -1,6 +1,13 @@
-FROM nginx:1.21.1
-LABEL maintainer="Ky zerbo zerbomohamed007@ yahoo.fr"
-WORKDIR /usr/share/nginx/html
-COPY . .
+FROM ubuntu:18.04 as files
+LABEL maintainer='ky zerbo'
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install git -y
+RUN mkdir /opt/files
+RUN git clone https://github.com/diranetafen/static-website-example.git /opt/files/
+
+
+FROM nginx:stable-alpine3.17-slim
+LABEL maintainer='ky zerbo'
+COPY --from=files /opt/files/ /usr/share/nginx/html/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
-CMD nginx -g 'daemon off;'
