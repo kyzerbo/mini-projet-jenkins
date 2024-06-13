@@ -30,7 +30,7 @@ pipeline {
                }
             }
         }
-        tage('Test image') {
+        stage('Test image') {
            agent any
            steps {
               script {
