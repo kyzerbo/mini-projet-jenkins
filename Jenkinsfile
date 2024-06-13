@@ -14,10 +14,10 @@ pipeline {
              steps {
                 script {
                   sh 'docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG .'
-                  }
-              }
-           }
-       }
+                   }
+                }
+             }
+         }
          stage('Run container based on builded image') {
             agent any
             steps {
@@ -28,9 +28,9 @@ pipeline {
                     docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:5000 -e PORT=5000 ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
                     sleep 5
                  '''
-               }
-            }
-       }
+                }
+             }
+         }
          stage('Test image') {
            agent any
            steps {
@@ -38,8 +38,8 @@ pipeline {
                 sh '''
                     curl http://172.17.0.1:${PORT_EXPOSED} | grep -q "Hello world!"
                 '''
-              }
-           }
-       }
+               }
+            }
+         }
      
 }
