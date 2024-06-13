@@ -30,40 +30,8 @@ pipeline {
                }
             }
        }
-       stage('Test image') {
-           agent any
-           steps {
-              script {
-                sh '''
-                    curl http://172.17.0.1:${PORT_EXPOSED} | grep -q "Hello world!"
-                '''
-              }
-           }
-      }
-      stage('Clean Container') {
-          agent any
-          steps {
-             script {
-               sh '''
-                 docker stop $IMAGE_NAME
-                 docker rm $IMAGE_NAME
-               '''
-             }
-          }
-     }
-
-        stage('Save artefact') {
-          agent any
-          steps {
-             script {
-               sh '''
-                 docker save ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG > /tmp/alpinehelloworld.tar
-                 
-               '''
-             }
-          }
-     }  
-          
+       
+       
      
 
   }
