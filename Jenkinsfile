@@ -29,7 +29,29 @@ pipeline {
                  '''
                }
             }
+        }
+        tage('Test image') {
+           agent any
+           steps {
+              script {
+                sh '''
+                   curl 172.17.0.1 | grep -i "Dimension"
+                '''
+              }
+           }
        }
+       stage('Clean container') {
+          agent any
+          steps {
+             script {
+               sh '''
+                   docker stop $IMAGE_NAME
+                   docker rm $IMAGE_NAME
+               '''
+             }
+          }
+      }  
+          
        
      } 
      
