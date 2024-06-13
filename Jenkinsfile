@@ -3,7 +3,7 @@ pipeline {
        ID_DOCKER = "${ID_DOCKER_PARAMS}"
        IMAGE_NAME = "miniprojetjenkins"
        IMAGE_TAG = "latest"
-       PORT_EXPOSED = "80" 
+      PORT_EXPOSED = "80" 
        STAGING = "${ID_DOCKER}-staging"
        PRODUCTION = "${ID_DOCKER}-production"
      }
@@ -14,11 +14,10 @@ pipeline {
              steps {
                 script {
                   sh 'docker build -t ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG .'
-                   }
                 }
              }
-         }
-         stage('Run container based on builded image') {
+        }
+        stage('Run container based on builded image') {
             agent any
             steps {
                script {
@@ -28,18 +27,43 @@ pipeline {
                     docker run --name $IMAGE_NAME -d -p ${PORT_EXPOSED}:5000 -e PORT=5000 ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG
                     sleep 5
                  '''
-                }
-             }
-         }
-         stage('Test image') {
+               }
+            }
+       }
+       stage('Test image') {
            agent any
            steps {
               script {
                 sh '''
                     curl http://172.17.0.1:${PORT_EXPOSED} | grep -q "Hello world!"
                 '''
-               }
-            }
-         }
+              }
+           }
+      }
+      stage('Clean Container') {
+          agent any
+          steps {
+             script {
+               sh '''
+                 docker stop $IMAGE_NAME
+                 docker rm $IMAGE_NAME
+               '''
+             }
+          }
+     }
+
+        stage('Save artefact') {
+          agent any
+          steps {
+             script {
+               sh '''
+                 docker save ${ID_DOCKER}/$IMAGE_NAME:$IMAGE_TAG > /tmp/alpinehelloworld.tar
+                 
+               '''
+             }
+          }
+     }  
+          
      
-}
+
+  }
